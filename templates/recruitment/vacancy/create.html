@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+{% block title %}Vacancy{% endblock title %}
+{% block content %}
+
+<!-- Button trigger modal -->
+{% if user.profile.user_type == "admin" %}
+<section class="d-flex justify-content-between">
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+                <div class="btn bg-success-subtle card" style="border-radius: 15px;">
+                    <div class="card-body p-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Create Vacancy
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Vacancy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" >
+                <div class="modal-body">
+
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div  id="vacancy-list"
+    href="{% url "vacancy_list" %}" hx-swap="outerHTML" hx-trigger="load"
+>
+{% comment %} <div  id="vacancy-list">
+    {% include "recruitment/vacancy/list.html" with vacancies=vacancies %} {% endcomment %}
+</div>
+{% endblock content %}

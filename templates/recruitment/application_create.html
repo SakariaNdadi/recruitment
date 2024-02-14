@@ -1,0 +1,15 @@
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% load tailwind_filters %} 
+{% comment %} {% block title %}{% endblock title %} {% endcomment %} 
+{% comment %} {% block content %} {% endcomment %}
+<form hx-post="{% url 'apply' vacancy.pk %}" enctype="multipart/form-data">
+	{% csrf_token %}
+    {{form|crispy }}
+	<button
+		class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+		type="submit"
+	>
+		Apply
+	</button>
+</form>
+{% comment %} {% endblock content %} {% endcomment %}

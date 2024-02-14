@@ -1,0 +1,457 @@
+[
+{
+  "model": "company.department",
+  "pk": 1,
+  "fields": {
+    "name": "Finance",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 2,
+  "fields": {
+    "name": "Marketing",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 3,
+  "fields": {
+    "name": "Commercial",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 4,
+  "fields": {
+    "name": "Technical Operations & Projects",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 5,
+  "fields": {
+    "name": "Human Resources",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 6,
+  "fields": {
+    "name": "Internal Audit & Risk Management",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 7,
+  "fields": {
+    "name": "Legal & Regulatory Services",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.department",
+  "pk": 8,
+  "fields": {
+    "name": "Corporate Communications & Public Relations",
+    "description": "",
+    "chief": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 1,
+  "fields": {
+    "title": "Accounting & Control",
+    "description": "",
+    "department": 1,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 2,
+  "fields": {
+    "title": "Management Accounting & Financial planning",
+    "description": "",
+    "department": 1,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 3,
+  "fields": {
+    "title": "Credit Control",
+    "description": "",
+    "department": 1,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 4,
+  "fields": {
+    "title": "Supply Chain",
+    "description": "",
+    "department": 1,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 6,
+  "fields": {
+    "title": "Strategy",
+    "description": "",
+    "department": 2,
+    "manager": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 7,
+  "fields": {
+    "title": "Intelligence",
+    "description": "",
+    "department": 2,
+    "manager": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 8,
+  "fields": {
+    "title": "Office of CMO",
+    "description": "",
+    "department": 2,
+    "manager": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 9,
+  "fields": {
+    "title": "Product Research & Development",
+    "description": "",
+    "department": 2,
+    "manager": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 11,
+  "fields": {
+    "title": "Central Business Area",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 12,
+  "fields": {
+    "title": "Customer Contact Centre",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 13,
+  "fields": {
+    "title": "Maritime Rescue Coordination Centre",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 14,
+  "fields": {
+    "title": "Back Office",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 15,
+  "fields": {
+    "title": "Government",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 16,
+  "fields": {
+    "title": "Wholesale & International",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 17,
+  "fields": {
+    "title": "Retail/Teleshop",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 18,
+  "fields": {
+    "title": "DEPI",
+    "description": "",
+    "department": 4,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 19,
+  "fields": {
+    "title": "Development & Organisational Effectiveness",
+    "description": "",
+    "department": 5,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 20,
+  "fields": {
+    "title": "Partnering & Administration",
+    "description": "",
+    "department": 5,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 21,
+  "fields": {
+    "title": "Employee Relations & Wellness",
+    "description": "",
+    "department": 5,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 22,
+  "fields": {
+    "title": "Revenue Assurance & Network Fraud",
+    "description": "",
+    "department": 6,
+    "manager": 1
+  }
+},
+{
+  "model": "company.division",
+  "pk": 23,
+  "fields": {
+    "title": "Legal & Regulatory Services",
+    "description": "",
+    "department": 7,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 25,
+  "fields": {
+    "title": "Business Information & Technology",
+    "description": "",
+    "department": 4,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 26,
+  "fields": {
+    "title": "Field Service",
+    "description": "",
+    "department": 4,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 27,
+  "fields": {
+    "title": "Network Operations",
+    "description": "",
+    "department": 4,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 28,
+  "fields": {
+    "title": "Commercial South",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 29,
+  "fields": {
+    "title": "Commercial Central",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 30,
+  "fields": {
+    "title": "Commercial Erongo",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 31,
+  "fields": {
+    "title": "Commercial North",
+    "description": "",
+    "department": 3,
+    "manager": null
+  }
+},
+{
+  "model": "company.division",
+  "pk": 32,
+  "fields": {
+    "title": "Corporate Communication & Public Relations",
+    "description": "",
+    "department": 8,
+    "manager": null
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 1,
+  "fields": {
+    "type": "bachelors",
+    "title": "Computer Science"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 2,
+  "fields": {
+    "type": "bachelors",
+    "title": "Informatics"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 3,
+  "fields": {
+    "type": "bachelors",
+    "title": "Cyber Security"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 4,
+  "fields": {
+    "type": "honours",
+    "title": "Data Analytics"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 5,
+  "fields": {
+    "type": "masters",
+    "title": "Artificial Intelligence"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 6,
+  "fields": {
+    "type": "nta3",
+    "title": "Electrical General"
+  }
+},
+{
+  "model": "company.qualification",
+  "pk": 7,
+  "fields": {
+    "type": "diploma",
+    "title": "Telecommunications"
+  }
+},
+{
+  "model": "company.position",
+  "pk": 1,
+  "fields": {
+    "title": "Intern",
+    "key_purpose": "Learn and contribute to projects",
+    "key_result_areas": "Assist in project tasks, participate in team meetings",
+    "key_knowledge": "Basic understanding of relevant technologies/tools",
+    "personality_requirements": "Willingness to learn, good communication skills",
+    "experience": "No prior professional experience required",
+    "job_grade": "b1",
+    "division": 19,
+    "line_manager": null,
+    "qualification": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "company.position",
+  "pk": 2,
+  "fields": {
+    "title": "Senior Manager",
+    "key_purpose": "Lead and manage teams, drive strategic initiatives",
+    "key_result_areas": "Achieve departmental goals, mentor and develop team members",
+    "key_knowledge": "Deep understanding of industry trends, strong leadership skills",
+    "personality_requirements": "Excellent communication, decision-making skills",
+    "experience": "Minimum 8 years of relevant managerial experience",
+    "job_grade": "d1",
+    "division": 19,
+    "line_manager": null,
+    "qualification": [
+      5
+    ]
+  }
+}
+]

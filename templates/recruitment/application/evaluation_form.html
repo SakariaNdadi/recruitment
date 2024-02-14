@@ -1,0 +1,23 @@
+<form method="post"  action="{% url 'application_evaluation' application.pk %}">
+    {% csrf_token %}
+        <label for="{{ form.remarks.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
+        <div>
+            <textarea name="remarks" class="block w-full p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                {{ form.remarks.value }}
+            </textarea>
+        </div>
+        <label for="{{ form.status.id_for_label }}">Status:</label>
+        <div>
+            <button type="submit" name="status" value="shortlisted">
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                    <span class="font-medium">Shortlist</span>
+                </div>
+            </button>
+            <button type="submit" name="status" value="rejected" class="btn btn-danger">
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <span class="font-medium">Reject</span>
+                </div>
+            </button>
+        </div>
+    </div>
+</form>

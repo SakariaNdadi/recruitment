@@ -1,0 +1,38 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==5"
+django-allauth = "*"
+pillow = "*"
+django-cleanup = "*"
+django-widget-tweaks = "*"
+djangorestframework = "*"
+plotly = "*"
+pandas = "*"
+pyyaml = "*"
+pycountry = "*"
+pipenv = "*"
+psycopg = {extras = ["binary"], version = "*"}
+redis = "*"
+django-redisboard = "*"
+attrs = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+coreapi = "*"
+drf-yasg = "*"
+gunicorn = "*"
+whitenoise = "*"
+django-recaptcha = "*"
+streamlit = "*"
+django-money = "*"
+crispy-tailwind = "*"
+python-dotenv = "*"
+dj-database-url = "*"
+openai = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

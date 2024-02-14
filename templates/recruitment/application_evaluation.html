@@ -1,0 +1,32 @@
+<form class="form-control border-0" method="post" 
+    action="{% url "application_evaluation" application.pk %}"
+    >
+    {% csrf_token %}
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text" for="{{ form.remarks.id_for_label }}">Remarks</span>
+                <textarea class="form-control" name="remarks" aria-label="With textarea">{{ form.remarks.value }}</textarea>
+              </div>
+        </div>
+        <div class="form-group pt-5">
+            <div class="input-group">
+                <span class="input-group-text">Current Status</span>
+                <div>
+                    {% if form.status.value == "shortlisted" %}
+                    <button type="button" class="btn btn-success" disabled >Shortlisted</button>
+                    {% elif form.status.value == "rejected" %}
+                    <button type="button" class="btn btn-danger" disabled >Rejected</button>
+                    {% else %}
+                    <button type="button" class="btn btn-secondary" disabled >{{ form.status.value }}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group pt-3 ">
+            <div class="input-group">
+                <span class="input-group-text" for="{{ form.remarks.id_for_label }}">Change Status:</span>
+                <button type="submit" name="status" value="shortlisted" class="btn btn-outline-success">Shortlisted</button>
+                <button type="submit" name="status" value="rejected" class="btn btn-outline-danger">Rejected</button>
+            </div>
+        </div>
+</form>

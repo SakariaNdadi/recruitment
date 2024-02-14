@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Profiles{% endblock title %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}" />
+<script src="{% static 'js/datatables.min.js' %}"></script>
+{% endblock head %}
+{% block content %}
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Users</h1>
+    </div>
+</header>
+
+<section class="p-3 sm:p-5">
+    <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-8">
+                <table id="userTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-4 py-3">First Name</th>
+                            <th scope="col" class="px-4 py-3">Last Name</th>
+                            <th scope="col" class="px-4 py-3">Email</th>
+                            <th scope="col" class="px-4 py-3">Position</th>
+                            <th scope="col" class="px-4 py-3">Division</th>
+                            <th scope="col" class="px-4 py-3">Gender</th>
+                            <th scope="col" class="px-4 py-3">Employee ID</th>
+                            <th scope="col" class="px-4 py-3">
+                                <span class="sr-only">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in profiles %}
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-4 py-3">{{ profile.first_name }}</td>
+                                <td class="px-4 py-3">{{ profile.last_name }}</td>
+                                <td class="px-4 py-3">{{ profile.user.email }}</td>
+                                <td class="px-4 py-3">{{ profile.position }}</td>
+                                <td class="px-4 py-3">{{ profile.position.division }}</td>
+                                <td class="px-4 py-3">{{ profile.gender }}</td>
+                                <td class="px-4 py-3">{{ profile.employee_id }}</td>
+                                <td class="px-4 py-3 flex items-center justify-end" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                    <button type="button" id="{{profile.id}}" hx-delete="{% url "delete_question" profile.pk %}" hx-target="#profile-list" hx-confirm="Are you sure you want to remove this profile?"
+                                        class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" >
+                                        <svg class="w-4 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" id="{{profile.id}}"
+                                        class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" >
+                                        <svg class="w-4 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17v1a.97.97 0 0 1-.933 1H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2M6 1v4a1 1 0 0 1-1 1H1m13.14.772 2.745 2.746M18.1 5.612a2.086 2.086 0 0 1 0 2.953l-6.65 6.646-3.693.739.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    let table = new DataTable('#userTable', {
+        dom: 'Bfrtip',
+            buttons: [
+                'excel', 'pdf', 'delete',
+            ]
+    })
+</script>
+
+{% endblock content %}

@@ -1,0 +1,308 @@
+[
+{
+  "model": "recruitment.region",
+  "pk": 1,
+  "fields": {
+    "name": "Khomas"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 2,
+  "fields": {
+    "name": "!Karas"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 3,
+  "fields": {
+    "name": "Hardap"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 4,
+  "fields": {
+    "name": "Omaheke"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 5,
+  "fields": {
+    "name": "Erongo"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 6,
+  "fields": {
+    "name": "Otjozondjupa"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 7,
+  "fields": {
+    "name": "Kunene"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 8,
+  "fields": {
+    "name": "Omusati"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 9,
+  "fields": {
+    "name": "Oshana"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 10,
+  "fields": {
+    "name": "Oshikoto"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 11,
+  "fields": {
+    "name": "Ohangwena"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 12,
+  "fields": {
+    "name": "Kavango West"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 13,
+  "fields": {
+    "name": "Kavango East"
+  }
+},
+{
+  "model": "recruitment.region",
+  "pk": 14,
+  "fields": {
+    "name": "Zambezi"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 1,
+  "fields": {
+    "region": 1,
+    "name": "Windhoek"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 2,
+  "fields": {
+    "region": 2,
+    "name": "Oranjemund"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 3,
+  "fields": {
+    "region": 2,
+    "name": "Luderitz"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 4,
+  "fields": {
+    "region": 2,
+    "name": "Keetmanshoop"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 5,
+  "fields": {
+    "region": 2,
+    "name": "Karasburg"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 6,
+  "fields": {
+    "region": 3,
+    "name": "Rehoboth"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 7,
+  "fields": {
+    "region": 3,
+    "name": "Mariental"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 8,
+  "fields": {
+    "region": 4,
+    "name": "Gobabis"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 9,
+  "fields": {
+    "region": 5,
+    "name": "Swakopmund"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 10,
+  "fields": {
+    "region": 5,
+    "name": "Walvisbaai"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 11,
+  "fields": {
+    "region": 6,
+    "name": "Okahandja"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 12,
+  "fields": {
+    "region": 6,
+    "name": "Otjiwarongo"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 13,
+  "fields": {
+    "region": 7,
+    "name": "Opuwo"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 14,
+  "fields": {
+    "region": 7,
+    "name": "Outjo"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 15,
+  "fields": {
+    "region": 8,
+    "name": "Okahao"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 16,
+  "fields": {
+    "region": 8,
+    "name": "Outapi"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 17,
+  "fields": {
+    "region": 9,
+    "name": "Oshakati"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 18,
+  "fields": {
+    "region": 9,
+    "name": "Ongwediva"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 19,
+  "fields": {
+    "region": 9,
+    "name": "Ondangwa"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 20,
+  "fields": {
+    "region": 10,
+    "name": "Tsumeb"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 21,
+  "fields": {
+    "region": 10,
+    "name": "Omuthiya"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 22,
+  "fields": {
+    "region": 11,
+    "name": "Eenhana"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 23,
+  "fields": {
+    "region": 11,
+    "name": "Oshikango"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 24,
+  "fields": {
+    "region": 12,
+    "name": "Nkurenkura"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 25,
+  "fields": {
+    "region": 13,
+    "name": "Rundu"
+  }
+},
+{
+  "model": "recruitment.town",
+  "pk": 26,
+  "fields": {
+    "region": 14,
+    "name": "Katima Mulilo"
+  }
+}
+]

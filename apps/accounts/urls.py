@@ -1,0 +1,80 @@
+from django.urls import path
+from .views import (
+    ProfileDetailView,
+    ProfileCreateView,
+    EducationCreateView,
+    EducationDetailView,
+    EducationListView,
+    ExperienceCreateView,
+    ExperienceDetailView,
+    ExperienceListView,
+    CertificationCreateView,
+    CertificationDetailView,
+    CertificationListView,
+    ProfileUpdateView,
+    ProfileListView,
+)
+
+urlpatterns = [
+    path("profiles/", ProfileListView.as_view(), name="users"),
+    path(
+        "profile/<int:pk>/",
+        ProfileDetailView.as_view(),
+        name="profile_detail",
+    ),
+    path(
+        "profile/create/<int:pk>/",
+        ProfileCreateView.as_view(),
+        name="profile_create",
+    ),
+    path(
+        "profile/update/<int:pk>/",
+        ProfileUpdateView.as_view(),
+        name="profile_update",
+    ),
+    path(
+        "education/<int:pk>/",
+        EducationDetailView.as_view(),
+        name="education_detail",
+    ),
+    path(
+        "education/",
+        EducationCreateView.as_view(),
+        name="education_create",
+    ),
+    path(
+        "education/list/",
+        EducationListView.as_view(),
+        name="education_list",
+    ),
+    path(
+        "experience/<int:pk>/",
+        ExperienceDetailView.as_view(),
+        name="experience_detail",
+    ),
+    path(
+        "experience/",
+        ExperienceCreateView.as_view(),
+        name="experience_create",
+    ),
+    path(
+        "experience/list/",
+        ExperienceListView.as_view(),
+        name="experience_list",
+    ),
+    path(
+        "certification/<int:pk>/",
+        CertificationDetailView.as_view(),
+        name="certification_detail",
+    ),
+    path(
+        "certification/",
+        CertificationCreateView.as_view(),
+        name="certification_create",
+    ),
+    path(
+        "certification/list/",
+        CertificationListView.as_view(),
+        name="certification_list",
+    ),
+]
