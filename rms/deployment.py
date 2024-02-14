@@ -7,8 +7,6 @@ load_dotenv()
 DEBUG = False
 
 ALLOWED_HOSTS = os.environ["WEBSITE_HOSTNAME"]
-HOST = '0.0.0.0'
-PORT = 10000
 
 DATABASES = {
     "default": {
