@@ -1,8 +1,5 @@
-# Activate virtual environment
-pipenv shell
-
 # Install dependencies
-pipenv install
+pip install -r requirements.txt
 
 # Collect Staticfiles
 python manage.py collectstatic
@@ -14,7 +11,7 @@ python manage.py migrate
 
 # Create superuser
 python manage.py createsuperuser --username admin --email admin@email.com --noinput
-python manage.py changepassword admin admin
+# python manage.py changepassword admin admin
 
 
 # Load initial data
