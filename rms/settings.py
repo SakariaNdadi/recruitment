@@ -12,9 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "secret_key+bro"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0", ".telecom.na"]
 ALLOWED_HOSTS = ["*"]
 
 
@@ -44,7 +43,6 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "widget_tweaks",
     # Audit and filecleanup
-    # "easyaudit",
     "django_cleanup.apps.CleanupConfig",
     # Cache
     "redisboard",
@@ -73,7 +71,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",  # allauth
-    # "easyaudit.middleware.easyaudit.EasyAuditMiddleware",  # easy_audit
     "apps.accounts.middleware.ProfileMiddleware",
 ]
 
@@ -220,18 +217,6 @@ SWAGGER_SETTINGS = {
 
 # Messages
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-# Cache and Sessions
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379",
-#     }
-# }
-# REDIS_URL = 'redis://cache:6379'
-# CACHES['default']['LOCATION'] = REDIS_URL
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_CACHE_ALIAS = "default"
 
 # GOOGLE RECAPTCHA
 RECAPTCHA_PUBLIC_KEY = "6LdQRSkpAAAAADhklDMnq1EDOhMu-DjvYdIWuqiM"
