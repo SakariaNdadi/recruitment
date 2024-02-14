@@ -3,4 +3,5 @@ services:
     name: rms
     runtime: python
     buildCommand: "./run_commands.sh"
-    startCommand: "gunicorn rms.wsgi:application --bind 0.0.0.0:$PORT"
+    # startCommand: "gunicorn rms.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn rms.wsgi:application"
