@@ -1,5 +1,5 @@
 import os
-from settings import *
+from .settings import *
 from dotenv import load_dotenv
 
 load_dotenv()
