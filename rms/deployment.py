@@ -6,7 +6,8 @@ load_dotenv()
 
 DEBUG = False
 
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
+# ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
+ALLOWED_HOSTS = ["*"]
 
 DATABASES = {
     "default": {
