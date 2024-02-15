@@ -6,7 +6,13 @@ load_dotenv()
 
 DEBUG = os.environ["DEBUG"]
 
-ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"]
+if "ALLOWED_HOSTS" in os.environ:
+    ALLOWED_HOSTS = [
+        host.strip() for host in os.environ.get("ALLOWED_HOSTS").split(",")
+    ]
+else:
+    # If the environment variable is not set, allow all hosts
+    ALLOWED_HOSTS = ["*"]
 # ALLOWED_HOSTS = ["*"]
 
 DATABASES = {
