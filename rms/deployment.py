@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DEBUG = False
+DEBUG = os.environ["DEBUG"]
 
-# ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"]
+# ALLOWED_HOSTS = ["*"]
 
 DATABASES = {
     "default": {
