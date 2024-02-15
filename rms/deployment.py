@@ -6,14 +6,11 @@ load_dotenv()
 
 DEBUG = os.environ["DEBUG"]
 
-if "ALLOWED_HOSTS" in os.environ:
-    ALLOWED_HOSTS = [
-        host.strip() for host in os.environ.get("ALLOWED_HOSTS").split(",")
-    ]
-else:
-    # If the environment variable is not set, allow all hosts
-    ALLOWED_HOSTS = ["*"]
-# ALLOWED_HOSTS = ["*"]
+# Retrieve the value of ALLOWED_HOSTS from the environment variable
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",")]
+
+# Add 'recruitment-8zej.onrender.com' to the ALLOWED_HOSTS list
+ALLOWED_HOSTS.append('recruitment-8zej.onrender.com')
 
 DATABASES = {
     "default": {
