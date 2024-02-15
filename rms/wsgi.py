@@ -12,7 +12,7 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 settings_module = (
-    "rms.deployment" if "WEBSITE_HOSTNAME" in os.environ else "rms.settings"
+    "rms.deployment" if "ALLOWED_HOSTS" in os.environ else "rms.settings"
 )
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
