@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}E-Learning{% endblock title %}
+{% block content %}
+<div id="here">
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">My Courses</h1>
+        <div class="content-center justify-end">
+            <a href="{% url 'course_create' %}" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                Create new course
+                <span class="inline-flex justify-content-end">
+                    <svg class="pt-3 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+</header>
+
+
+<section class="p-3 sm:p-5">
+    <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+        {% for course in courses %}
+        <div>
+            <div class="w-full p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex flex-col items-center">
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ course.title }}</h5>
+                    <div class="flex mt-4 md:mt-6">
+                        <a href="{% url 'course_edit' course.id %}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</a>
+                        <a href="{% url 'course_module_update' course.id %}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700 ms-3">Update Course Module</a>
+                        <a hx-get="{% url 'course_delete' course.id %}" hx-swap="innerHtml transition:true" hx-target="#here" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-red-700 border border-gray-300 rounded-lg hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700 ms-3">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>You haven't created any courses yet.</p>
+    {% endfor %}
+    </div>
+</section>
+</div>
+{% endblock content %}

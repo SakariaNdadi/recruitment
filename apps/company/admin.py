@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department,Division,Position, Qualification
+from .models import Department,Division,Position, Qualification, Certification
 
 
 class DivisionInline(admin.TabularInline):
@@ -38,5 +38,16 @@ class QualificationAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         "type",
+        "title",
+    ]
+
+@admin.register(Certification)
+class CertificationAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "level",
+    ]
+    list_filter = [
+        "title",
         "title",
     ]

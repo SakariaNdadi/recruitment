@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  # Application
+  web:
+    build: .
+    command:
+      [
+        "./wait-for-it.sh",
+        "db:5432",
+        "--",
+        "gunicorn",
+        "rms.wsgi",
+        "-b",
+        "0.0.0.0:${PORT:-8000}",
+      ]
+    volumes:
+      - .:/code
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=rms.settings.prod
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - cache
+
+  # Celery Worker
+  celery_worker:
+    build: .
+    command: celery -A rms worker -l info
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - cache
+      - rabbitmq
+
+  # Databases
+  db:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+  # Cache
+  cache:
+    image: redis:latest
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "6379:6379"
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"   # RabbitMQ default port
+      - "15672:15672" # RabbitMQ management UI port
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

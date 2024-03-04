@@ -1,12 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ application.vacancy }}{% endblock title %}
+{% block header %}{{ application.vacancy }}{% endblock header %}
 {% block content %}
-<header class="bg-white shadow">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ application.vacancy }} - {{ application.user.profile.first_name }} {{ application.user.profile.last_name }}</h1>
-    </div>
-</header>
-
 <section class="p-3 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden p-8">
@@ -61,7 +56,49 @@
                                 Key Purpose
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {{ application.vacancy.position.key_purpose }}
+                                <div class="ck ck-content">
+                                    {{ application.vacancy.position.key_purpose|safe }}
+                                </div>
+                            </dd>
+                        </div>
+                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Key Result Areas
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <div class="ck ck-content">
+                                    {{ application.vacancy.position.key_result_areas|safe }}
+                                </div>
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Key Knowledge
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <div class="ck ck-content">
+                                    {{ application.vacancy.position.key_knowledge|safe }}
+                                </div>
+                            </dd>
+                        </div>
+                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Personality Requirements
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <div class="ck ck-content">
+                                    {{ application.vacancy.position.personlaity_requirements|safe }}
+                                </div>
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Exprience Required
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <div class="ck ck-content">
+                                    {{ application.vacancy.position.experience }}
+                                </div>
                             </dd>
                         </div>
                     </dl>
@@ -85,8 +122,12 @@
                             <dt class="text-sm font-medium text-gray-500">
                                 Full name
                             </dt>
-                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <dd class="text-capitalize mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {% if application.user %}
                                 {{ application.user.profile.first_name }} {{ application.user.profile.last_name }}
+                                {% else %}
+                                {{ application.first_name }} {{ application.last_name }}
+                                {% endif %}
                             </dd>
                         </div>
                         <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -94,7 +135,11 @@
                                 Email
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {% if application.user %}
                                 {{ application.user.email }}
+                                {% else %}
+                                {{ application.email }}
+                                {% endif %}
                             </dd>
                         </div>
                         <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -102,7 +147,11 @@
                                 Date of Birth
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {% if application.user %}
                                 {{ application.user.profile.date_of_birth }}
+                                {% else %}
+                                {{ application.date_of_birth }}
+                                {% endif %}
                             </dd>
                         </div>
                         <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -110,9 +159,43 @@
                                 Contact Number
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {% if application.user %}
                                 {{ application.user.profile.primary_contact }}
                                 {% if application.user.profile.secondary_contact %}
                                 / {{ application.user.profile.secondary_contact }}
+                                {% endif %}
+                                {% else %}
+                                {{ application.primary_contact }}
+                                {% if application.secondary_contact %}
+                                / {{ application.secondary_contact }}
+                                {% endif %}
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Qualifications
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                
+                                {% for qualification in application.qualifications.all %}
+                                    {% if qualification > 1 %}{{ qualification }},{% else %}{{ qualification }}{% endif %}
+                                {% endfor %}
+                                    
+                            </dd>
+                        </div>
+                        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">
+                                Cover Letter
+                            </dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                
+                                {% if application.cover_letter %}
+                                    <div class="ck ck-content">
+                                        {{ application.cover_letter|safe }}
+                                    </div>
+                                {% else %}
+                                    No cover letter
                                 {% endif %}
                             </dd>
                         </div>
@@ -121,7 +204,7 @@
                                 CV
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                {% if application.user.profile.cv %}
+                                {% if application.user.profile.cv or application.cv %}
                                 <button data-modal-target="cv-modal" data-modal-toggle="cv-modal" type="button"
                                     class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm p-1 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 text-uppercase">
                                     <i>Click to view CV</i>
@@ -136,13 +219,18 @@
                                 Required Documents
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                {% if application.document %}
                                 <button data-modal-target="documents-modal" data-modal-toggle="documents-modal"
                                     type="button"
                                     class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm p-1 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 text-uppercase">
                                     <i>Click to view Required Documents</i>
                                 </button>
+                                {% else %}
+                                No Documents Uploaded
+                                {% endif %}
                             </dd>
                         </div>
+                        {% if application.user %}
                         <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">
                                 Qualifications
@@ -191,6 +279,7 @@
                                 {% endfor %}
                             </dd>
                         </div>
+                        {% endif %}
                     </dl>
                 </div>
             </div>
@@ -213,8 +302,10 @@
                 <div class="bg-gray-50 px-4 py-5 ">
                     <div class="text-sm font-medium text-gray-500">
                         In this section you will evaluate the applicant. If their credentials are applicable
-                        you can select <span class="btn btn-outline-success">Shortlist</span> or <span class="btn btn-outline-danger">Reject</span>
-                        if they are not and leave remarks as to why you may have rejected them. An <strong>AUTOMATED EMAIL</strong>
+                        you can select <span class="btn btn-outline-success">Shortlist</span> or <span
+                            class="btn btn-outline-danger">Reject</span>
+                        if they are not and leave remarks as to why you may have rejected them. An <strong>AUTOMATED
+                            EMAIL</strong>
                         will be sent to them based on your choice.
                     </div>
                 </div>
@@ -224,11 +315,13 @@
                     </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         {% if application.status == "rejected" %}
-                        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                            role="alert">
                             <span class="font-medium">{{ application.status|upper }}.</span> Application evaluated
                         </div>
                         {% elif application.status == "shortlisted" %}
-                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                            role="alert">
                             <span class="font-medium">{{ application.status|upper }}.</span> Application evaluated
                         </div>
                         {% else %}
@@ -241,28 +334,18 @@
                     <dt class="text-sm font-medium text-gray-500">
                         Remarks
                     </dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <p class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         {{ application.remarks }}
-                    </dd>
+                    </p>
                 </div>
                 {% else %}
                 <div class="bg-gray-50 px-4 py-5">
-                    {% comment %} <div hx-get="{% url 'application_evaluation' application.pk %}" hx-trigger="load"  hx-swap="outerHTML" hx-target="#application_evaluation"  {% endcomment %}
                     <div class="d-flex justify-content-start align-items-center" id="application_evaluation">
-                        {% include "recruitment/application/evaluation_form.html" %}
+                        {% include "recruitment/application/partials/evaluation_form.html" %}
                     </div>
                 </div>
                 {% endif %}
             </div>
-
-
-
-
-
-
-
-
-
 
             <!-- CV MODAL START -->
             <div id="cv-modal" style="height: 100%;" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
@@ -287,6 +370,7 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-1 md:p-5 space-y-4 h-full">
+                            {% if application.user %}
                             {% if application.user.profile.cv %}
                             <object class="h-full w-full" data="{{ application.user.profile.cv.url }}"
                                 type="application/pdf">
@@ -295,6 +379,17 @@
                             </object>
                             {% else %}
                             <p>No file uploaded.</p>
+                            {% endif %}
+                            {% else %}
+                            {% if application.cv %}
+                            <object class="h-full w-full" data="{{ application.cv.url }}" type="application/pdf">
+                                <p>
+                                    Unable to display PDF. Please <a class="t"
+                                        href="{{ application.cv.url }}">download</a> it instead.</p>
+                            </object>
+                            {% else %}
+                            <p>No file uploaded.</p>
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -327,7 +422,7 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-1 md:p-5 space-y-4 h-full">
-                            {% if application.document.url %}
+                            {% if application.document %}
                             <object class="h-full w-full" data="{{ application.document.url }}" type="application/pdf">
                                 <p>Unable to display PDF. Please <a href="{{ application.document.url }}">download</a>
                                     it instead.</p>

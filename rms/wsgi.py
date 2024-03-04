@@ -11,11 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-settings_module = (
-    "rms.deployment" if "ALLOWED_HOSTS" in os.environ else "rms.settings"
-)
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rms.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rms.settings.base")
 
 application = get_wsgi_application()

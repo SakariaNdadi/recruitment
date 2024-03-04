@@ -31,6 +31,13 @@ crispy-tailwind = "*"
 python-dotenv = "*"
 dj-database-url = "*"
 openai = "*"
+pip-tools = "*"
+django-ckeditor-5 = "*"
+django-debug-toolbar = "*"
+celery = "*"
+flower = "*"
+channels = {extras = ["daphne"], version = "*"}
+django-extensions = "*"
 
 [dev-packages]
 

@@ -1,84 +1,324 @@
-{% load i18n %}
 {% load static %}
+{% if user.is_authenticated %}
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-100">
+<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
-    <link rel="icon" href="{% static 'logo.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/flowbite.min.css' %}">
-    <script src="{% static 'js/htmx.min.js' %}"></script>
-    <script>
-        document.addEventListener("contextmenu", (event) => {
-           event.preventDefault();
-        });
-    </script>
-    <script src="{% static 'js/index.global.min.js' %}"></script>
-    <script src="{% static 'js/alpine.min.js' %}" defer></script>
-
-    <style>
-        .nav-item a:hover {
-            cursor: pointer;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; }
-        }
-         
-        @keyframes fade-out {
-          to { opacity: 0; }
-        }
-         
-        @keyframes slide-from-right {
-          from { transform: translateX(90px); }
-        }
-         
-        @keyframes slide-to-left {
-          to { transform: translateX(-90px); }
-        }
-         
-        .slide-it {
-          view-transition-name: slide-it;
-        }
-         
-        ::view-transition-old(slide-it) {
-          animation: 180ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-          600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-        }
-        ::view-transition-new(slide-it) {
-          animation: 420ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-          600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-        }
-    </style>
-    {% block head %}{% endblock head %}
-</head>
-
-<body class="flex flex-col min-h-screen justify-between" oncontextmenu="return false;" autocomplete="off"> <!-- handle right clicking -->
-    {% autoescape off %}
-    <div class="min-h-full">
-        <!-- NAVBAR -->
-        {% include "components/navbar.html" %}
-        <!-- NAVBAR END -->
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         
-        <!-- MAIN CONTENT -->
-        {% block content %}
-        <main id="main-content">
-        <main>
-        {% endblock content %}
-        <!-- MAIN CONTENT END -->
+        <title>Telecom Namibia</title>
+        
+        <link rel="icon" href="{% static 'logo.png' %}" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'css/tailwind.css' %}" />
+        <link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
+        
+        {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+        <script src="{% static 'css/tailwindcss.css' %}"></script>
+        <script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+        <script src="{% static 'js/alpine.min.js' %}" defer></script>
+        <script src="{% static 'js/htmx.min.js' %}" defer></script>
+        <script src="{% static 'js/htmx.ws.js' %}" defer></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpine-collective/alpine-magic-helpers@0.5.x/dist/component.min.js"></script>
+        <script>
+            document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            });
+        </script>
+        {% block head %}{% endblock head %}
+    </head>
 
-        <!-- FOOTER -->
-        {% include "components/footer.html" %}
-        <!-- FOOTER END -->
-    </div>
+    <body oncontextmenu="return false;" autocomplete="off" hx-ext="ws" ws-connect="/ws/notifications/">
+        
+        {% autoescape off %}
+            <div x-data="setup()" x-init="$refs.loading.classList.add('hidden'); setColors(color);" :class="{ 'dark': isDark}">
+                <div class="flex h-screen antialiased text-gray-900 bg-gray-100 dark:bg-dark dark:text-light">
+                    <!-- Loading screen -->
+                    <div x-ref="loading"
+                        class="fixed inset-0 z-50 flex items-center justify-center text-2xl font-semibold text-white bg-primary-darker">
+                        Loading.....
+                    </div>
 
-    <!-- SCRIPTS -->
-    <script src="{% static 'js/flowbite.min.js' %}"></script>
-    {% block script %}{% endblock script %}
-    <!-- SCRIPTS END -->
+                    <!-- Sidebar -->
+                    {% include "partials/sidebar.html" %}
 
-    {% endautoescape %}
-</body>
+                    <div class="flex-1 h-full overflow-x-hidden overflow-y-auto">
+                        <!-- Navbar -->
+                        {% include "partials/navbar.html" %}
+
+                        <!-- Main content -->
+                        <main id="dashboard-main">
+                            <!-- Content header -->
+                            <div class="flex items-center justify-between px-4 py-4 border-b lg:py-6 dark:border-primary-darker">
+                                <h1 class="text-2xl font-semibold">{% block header %}Dashboard{% endblock header %}</h1>
+                                {% block header-button %}
+                                    
+                                {% endblock header-button %}
+                            </div>
+                            <!-- Content -->
+                            <div class="mt-2">
+                                {% block content %}
+                                    <!-- Vacancies cards -->
+                                    {% if vacancies %}
+                                        {% include "recruitment/vacancy/list.html" %}
+                                    {% endif %}
+                                    <!-- applications cards -->
+                                    {% if applications %}
+                                        {% include "recruitment/application/list.html" %}
+                                    {% endif %}
+
+                                    <!-- Charts -->
+                                    {% comment %} <div class="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
+                                        <!-- Bar chart card -->
+                                        <div class="col-span-2 bg-white rounded-md dark:bg-darker" x-data="{ isOn: false }">
+                                            <!-- Card header -->
+                                            <div class="flex items-center justify-between p-4 border-b dark:border-primary">
+                                                <h4 class="text-lg font-semibold text-gray-500 dark:text-light">Bar Chart</h4>
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-sm text-gray-500 dark:text-light">Last year</span>
+                                                    <button class="relative focus:outline-none" x-cloak
+                                                        @click="isOn = !isOn; $parent.updateBarChart(isOn)">
+                                                        <div
+                                                            class="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker">
+                                                        </div>
+                                                        <div class="absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm"
+                                                            :class="{ 'translate-x-0  bg-white dark:bg-primary-100': !isOn, 'translate-x-6 bg-primary-light dark:bg-primary': isOn }">
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- Chart -->
+                                            <div class="relative p-4 h-72">
+                                                <canvas id="barChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <!-- Doughnut chart card -->
+                                        <div class="bg-white rounded-md dark:bg-darker" x-data="{ isOn: false }">
+                                            <!-- Card header -->
+                                            <div class="flex items-center justify-between p-4 border-b dark:border-primary">
+                                                <h4 class="text-lg font-semibold text-gray-500 dark:text-light">Doughnut Chart</h4>
+                                                <div class="flex items-center">
+                                                    <button class="relative focus:outline-none" x-cloak
+                                                        @click="isOn = !isOn; $parent.updateDoughnutChart(isOn)">
+                                                        <div
+                                                            class="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker">
+                                                        </div>
+                                                        <div class="absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm"
+                                                            :class="{ 'translate-x-0  bg-white dark:bg-primary-100': !isOn, 'translate-x-6 bg-primary-light dark:bg-primary': isOn }">
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- Chart -->
+                                            <div class="relative p-4 h-72">
+                                                <canvas id="doughnutChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div> {% endcomment %}
+
+                                    <!-- Two grid columns -->
+                                    {% comment %} <div class="grid grid-cols-1 p-4 space-y-8 lg:gap-8 lg:space-y-0 lg:grid-cols-3">
+                                        <!-- Active users chart -->
+                                        <div class="col-span-1 bg-white rounded-md dark:bg-darker">
+                                            <!-- Card header -->
+                                            <div class="p-4 border-b dark:border-primary">
+                                                <h4 class="text-lg font-semibold text-gray-500 dark:text-light">Active users right
+                                                    now</h4>
+                                            </div>
+                                            <p class="p-4">
+                                                <span class="text-2xl font-medium text-gray-500 dark:text-light"
+                                                    id="usersCount">0</span>
+                                                <span class="text-sm font-medium text-gray-500 dark:text-primary">Users</span>
+                                            </p>
+                                            <!-- Chart -->
+                                            <div class="relative p-4">
+                                                <canvas id="activeUsersChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <!-- Line chart card -->
+                                        <div class="col-span-2 bg-white rounded-md dark:bg-darker" x-data="{ isOn: false }">
+                                            <!-- Card header -->
+                                            <div class="flex items-center justify-between p-4 border-b dark:border-primary">
+                                                <h4 class="text-lg font-semibold text-gray-500 dark:text-light">Line Chart</h4>
+                                                <div class="flex items-center">
+                                                    <button class="relative focus:outline-none" x-cloak
+                                                        @click="isOn = !isOn; $parent.updateLineChart()">
+                                                        <div
+                                                            class="w-12 h-6 transition rounded-full outline-none bg-primary-100 dark:bg-primary-darker">
+                                                        </div>
+                                                        <div class="absolute top-0 left-0 inline-flex items-center justify-center w-6 h-6 transition-all duration-200 ease-in-out transform scale-110 rounded-full shadow-sm"
+                                                            :class="{ 'translate-x-0  bg-white dark:bg-primary-100': !isOn, 'translate-x-6 bg-primary-light dark:bg-primary': isOn }">
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <!-- Chart -->
+                                            <div class="relative p-4 h-72">
+                                                <canvas id="lineChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div> {% endcomment %}
+                                {% endblock content %}
+                            </div>
+                        </main>
+                    </div>
+
+                    <!-- Panels -->
+
+                    <!-- Settings Panel -->
+                    {% include "partials/settings.html" %}
+
+                    <!-- Notification panel -->
+                    {% include "partials/notifications.html" %}
+
+                    <!-- Search panel -->
+                    {% include "partials/search.html" %}
+                </div>
+            </div>
+
+            <!-- All javascript code in this project for now is just for demo DON'T RELY ON IT  -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js"></script>
+            <script src="{% static 'js/script.js' %}"></script>
+            <script src="{% static 'js/flowbite.min.js' %}"></script>
+            <script>
+                const setup = () => {
+                    const getTheme = () => {
+                        if (window.localStorage.getItem('dark')) {
+                            return JSON.parse(window.localStorage.getItem('dark'))
+                        }
+
+                        return !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                    }
+
+                    const setTheme = (value) => {
+                        window.localStorage.setItem('dark', value)
+                    }
+
+                    const getColor = () => {
+                        if (window.localStorage.getItem('color')) {
+                            return window.localStorage.getItem('color')
+                        }
+                        return 'cyan'
+                    }
+
+                    const setColors = (color) => {
+                        const root = document.documentElement
+                        root.style.setProperty('--color-primary', `var(--color-${color})`)
+                        root.style.setProperty('--color-primary-50', `var(--color-${color}-50)`)
+                        root.style.setProperty('--color-primary-100', `var(--color-${color}-100)`)
+                        root.style.setProperty('--color-primary-light', `var(--color-${color}-light)`)
+                        root.style.setProperty('--color-primary-lighter', `var(--color-${color}-lighter)`)
+                        root.style.setProperty('--color-primary-dark', `var(--color-${color}-dark)`)
+                        root.style.setProperty('--color-primary-darker', `var(--color-${color}-darker)`)
+                        this.selectedColor = color
+                        window.localStorage.setItem('color', color)
+                        //
+                    }
+
+                    const updateBarChart = (on) => {
+                        const data = {
+                            data: randomData(),
+                            backgroundColor: 'rgb(207, 250, 254)',
+                        }
+                        if (on) {
+                            barChart.data.datasets.push(data)
+                            barChart.update()
+                        } else {
+                            barChart.data.datasets.splice(1)
+                            barChart.update()
+                        }
+                    }
+
+                    const updateDoughnutChart = (on) => {
+                        const data = random()
+                        const color = 'rgb(207, 250, 254)'
+                        if (on) {
+                            doughnutChart.data.labels.unshift('Seb')
+                            doughnutChart.data.datasets[0].data.unshift(data)
+                            doughnutChart.data.datasets[0].backgroundColor.unshift(color)
+                            doughnutChart.update()
+                        } else {
+                            doughnutChart.data.labels.splice(0, 1)
+                            doughnutChart.data.datasets[0].data.splice(0, 1)
+                            doughnutChart.data.datasets[0].backgroundColor.splice(0, 1)
+                            doughnutChart.update()
+                        }
+                    }
+
+                    const updateLineChart = () => {
+                        lineChart.data.datasets[0].data.reverse()
+                        lineChart.update()
+                    }
+
+                    return {
+                        loading: true,
+                        isDark: getTheme(),
+                        toggleTheme() {
+                            this.isDark = !this.isDark
+                            setTheme(this.isDark)
+                        },
+                        setLightTheme() {
+                            this.isDark = false
+                            setTheme(this.isDark)
+                        },
+                        setDarkTheme() {
+                            this.isDark = true
+                            setTheme(this.isDark)
+                        },
+                        color: getColor(),
+                        selectedColor: 'cyan',
+                        setColors,
+                        toggleSidbarMenu() {
+                            this.isSidebarOpen = !this.isSidebarOpen
+                        },
+                        isSettingsPanelOpen: false,
+                        openSettingsPanel() {
+                            this.isSettingsPanelOpen = true
+                            this.$nextTick(() => {
+                                this.$refs.settingsPanel.focus()
+                            })
+                        },
+                        isNotificationsPanelOpen: false,
+                        openNotificationsPanel() {
+                            this.isNotificationsPanelOpen = true
+                            this.$nextTick(() => {
+                                this.$refs.notificationsPanel.focus()
+                            })
+                        },
+                        isSearchPanelOpen: false,
+                        openSearchPanel() {
+                            this.isSearchPanelOpen = true
+                            this.$nextTick(() => {
+                                this.$refs.searchInput.focus()
+                            })
+                        },
+                        isMobileSubMenuOpen: false,
+                        openMobileSubMenu() {
+                            this.isMobileSubMenuOpen = true
+                            this.$nextTick(() => {
+                                this.$refs.mobileSubMenu.focus()
+                            })
+                        },
+                        isMobileMainMenuOpen: false,
+                        openMobileMainMenu() {
+                            this.isMobileMainMenuOpen = true
+                            this.$nextTick(() => {
+                                this.$refs.mobileMainMenu.focus()
+                            })
+                        },
+                        updateBarChart,
+                        updateDoughnutChart,
+                        updateLineChart,
+                    }
+                }
+            </script>
+
+        {% endautoescape %}
+    </body>
 
 </html>
+{% endif %}

@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from apps.accounts.models import Profile, Education, Experience, Certification
+from apps.accounts.models import Profile
 from apps.recruitment.models import Application, Vacancy, Interview
 
 
@@ -10,64 +10,17 @@ class ProfileSerializer(ModelSerializer):
             "user",
             "first_name",
             "last_name",
-            "user_type",
+            "date_of_birth",
+            "id_number",
             "primary_contact",
             "secondary_contact",
-            "id_number",
             "gender",
             "population_group",
-            "date_of_birth",
-            "position",
-            "employee_id",
-            "division",
-            "call_center_number",
-            "picture",
+            "postal_address",
             "linkedin",
+            "picture",
             "cv",
         )
-
-
-class EducationSerializer(ModelSerializer):
-    class Meta:
-        model = Education
-        fields = (
-            "user",
-            "institution_name",
-            "qualification",
-            "obtained_date",
-            "file",
-        )
-
-
-class ExperienceSerializer(ModelSerializer):
-    class Meta:
-        model = Experience
-        fields = (
-            "user",
-            "job_title",
-            "job_description",
-            "company_name",
-            "employment_type",
-            "location",
-            "employment_status",
-            "industry",
-            "start_date",
-            "end_date",
-        )
-
-
-class CertificationSerializer(ModelSerializer):
-    class Meta:
-        model = Certification
-        fields = (
-            "user",
-            "title",
-            "institution_name",
-            "obtained_date",
-            "validity",
-            "file",
-        )
-
 
 class ApplicationSerializer(ModelSerializer):
     class Meta:
@@ -100,7 +53,7 @@ class InterviewSerializer(ModelSerializer):
     class Meta:
         model = Interview
         fields = (
-            "applicant",
+            "application",
             "dateTime",
             "status",
             "description",

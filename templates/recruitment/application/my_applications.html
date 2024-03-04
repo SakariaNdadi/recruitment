@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block header %}My Applications{%endblock header %}
+{% block content %}
+    {% if applications %}
+        {% include "recruitment/application/partials/list.html" %}
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,23 @@
+<header id="header">
+    <div class="container">
+
+        <div id="logo" class="pull-left">
+            <h1><a href="#intro" class="scrollto">Telecom</a></h1>
+        </div>
+
+        <nav id="nav-menu-container">
+            <ul class="nav-menu">
+                <li class="menu-active"><a href="#intro">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                {% if vacancies_is_external %}
+                <li><a href="#pricing">Vacancies</a></li>
+                {% endif %}
+                <!-- <li><a href="#features">Features</a></li> -->
+                <li><a href="#team">Team</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="{% url 'dashboard' %}">For Employees</a></li>
+            </ul>
+        </nav><!-- #nav-menu-container -->
+    </div>
+</header>

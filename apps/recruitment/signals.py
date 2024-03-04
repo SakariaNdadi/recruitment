@@ -1,16 +1,50 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
-from django.core import mail
 from .models import Application, Interview
 
 
 @receiver(post_save, sender=Application)
 def send_vacancy_application_notification_email(sender, instance, created, **kwargs):
-    if not created and instance.status == "shortlisted":
-        subject = f"{instance.vacancy} Application Status"
+    user = instance.user
+    subject = f"{instance.vacancy} Application Status"
+    from_email = "training@telecom.na"
+
+    if user:
+        first_name = getattr(user.profile, "first_name", None)
+        last_name = getattr(user.profile, "last_name", None)
+        recipient_list = [user.email]
+    else:
+        first_name = getattr(instance, "first_name", None)
+        last_name = getattr(instance, "last_name", None)
+        recipient_list = [instance.email]
+
+    recipient_name = (
+        f"{first_name} {last_name}" if first_name and last_name else "Applicant"
+    )
+
+    
+    if created and instance.status == "submitted":
+        do_not_reply = "Do not reply."
+
         message = f"""
-            Dear {instance.user.profile.first_name} {instance.user.profile.last_name},
+            Dear {recipient_name},
+
+            I trust this email finds you well. We appreciate the time and effort you invested in your application for the {instance.vacancy} role at Telecom Namibia Limited.
+            We will communicate in due course if your application has been successful or not.
+            If you have any questions or require additional information in the meantime, please feel free to contact us at training@telecom.na.
+
+            Best regards,
+
+            Mr OG Heitha
+
+        """
+        send_mail(do_not_reply, message, from_email, recipient_list)
+
+    if not created and instance.status == "shortlisted":
+
+        message = f"""
+            Dear {recipient_name},
 
             I trust this email finds you well. We appreciate the time and effort you invested in your application for the {instance.vacancy} role at Telecom Namibia Limited. After careful consideration, we are pleased to inform you that you have been shortlisted for the next stage of our selection process.
 
@@ -27,15 +61,11 @@ def send_vacancy_application_notification_email(sender, instance, created, **kwa
             Mr OG Heitha
 
         """
-        from_email = "training@telecom.na"
-        recipient_list = [instance.user.email]
-
         send_mail(subject, message, from_email, recipient_list)
 
     if not created and instance.status == "rejected":
-        subject = f"{instance.vacancy} Application Status"
         message = f"""
-            Dear {instance.user.profile.first_name} {instance.user.profile.last_name},
+            Dear {recipient_name},
             
             I hope this message finds you well. Thank you for your interest in the {instance.vacancy} position at Telecom Namibia Limited. We appreciate the time and effort you dedicated to the application process.
             
@@ -53,18 +83,32 @@ def send_vacancy_application_notification_email(sender, instance, created, **kwa
 
             Mr. OG Heitha
         """
-        from_email = "training@telecom.na"
-        recipient_list = [instance.user.email]
-
         send_mail(subject, message, from_email, recipient_list)
 
 
 @receiver(post_save, sender=Interview)
 def send_interview_notification_email(sender, instance, created, **kwargs):
+    user = instance.application.user
+    subject = f"{instance.application.vacancy} Application Interview"
+    from_email = "training@telecom.na"
+
+    if user:
+        first_name = getattr(user.profile, "first_name", None)
+        last_name = getattr(user.profile, "last_name", None)
+        recipient_list = [user.email]
+    else:
+        first_name = getattr(instance.application, "first_name", None)
+        last_name = getattr(instance.application, "last_name", None)
+        recipient_list = [instance.email]
+
+    recipient_name = (
+        f"{first_name} {last_name}" if first_name and last_name else "Applicant"
+    )
+
     if not created and instance.status == "scheduled":
-        subject = f"{instance.application.vacancy} Application Interview"
+
         message = f"""
-            Dear {instance.application.user.profile.first_name} {instance.application.user.profile.last_name},
+            Dear {recipient_name},
 
             I hope this email finds you well. We appreciate your interest in the {instance.application.vacancy} position at Telecom Namibia Limited. We are pleased to invite you for an interview to discuss your candidacy further.
 
@@ -87,7 +131,5 @@ def send_interview_notification_email(sender, instance, created, **kwargs):
 
             Mr. OG Heitha
         """
-        from_email = "training@telecom.na"
-        recipient_list = [instance.application.user.email]
 
         send_mail(subject, message, from_email, recipient_list)

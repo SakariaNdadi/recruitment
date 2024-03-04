@@ -2,30 +2,31 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
 from utils.mixins import OwnerEditMixin, OwnerMixin, get_user_type
-from .models import Profile, Education, Experience, Certification
+from django.contrib.auth.decorators import login_required
+from .models import Profile
 from .forms import (
-    EducationCreateForm,
-    ExperienceCreateForm,
-    CertificationCreateForm,
     AdminUpdateForm,
     EmployeeUpdateForm,
-    ApplicantUpdateForm,
     ProfileCreateBaseForm,
     EmployeeCreateForm,
-    ApplicantCreateForm,
 )
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-# ***************************************************************************
-class ProfileDetailView(OwnerMixin, DetailView):
+# ******************************************************************************************************
+#                                       PROFILE VIEWS
+# ******************************************************************************************************
+class ProfileDetailView(LoginRequiredMixin,DetailView):
     model = Profile
     context_object_name = "profile"
     template_name = "account/profile/detail.html"
 
+@login_required
+def my_profile(request):
+    template_name = "account/profile/detail.html"
+    return render(request,template_name)
 
 class ProfileUpdateView(OwnerEditMixin, UpdateView):
     template_name = "account/profile/update.html"
@@ -34,9 +35,7 @@ class ProfileUpdateView(OwnerEditMixin, UpdateView):
     def get_form_class(self):
         user_type = get_user_type(self.request.user)
 
-        if user_type == "applicant":
-            return ApplicantUpdateForm
-        elif user_type in ["temp", "staff", "manager", "chief"]:
+        if user_type in ["temp", "staff", "manager", "chief"]:
             return EmployeeUpdateForm
         elif user_type == "admin":
             return AdminUpdateForm
@@ -54,7 +53,7 @@ class ProfileUpdateView(OwnerEditMixin, UpdateView):
         return response
 
     def get_success_url(self):
-        return reverse_lazy("profile_detail", args=[self.pk])
+        return reverse_lazy("profile_detail", args=[self.request.user.pk])
 
 
 class ProfileCreateView(OwnerMixin, CreateView):
@@ -65,9 +64,7 @@ class ProfileCreateView(OwnerMixin, CreateView):
     def get_form(self, form_class=None):
         user_type = get_user_type(self.request.user)
 
-        if user_type == "applicant":
-            return ApplicantCreateForm(**self.get_form_kwargs())
-        elif user_type in ["temp", "staff", "manager", "chief"]:
+        if user_type in ["temp", "staff", "manager", "chief"]:
             return EmployeeCreateForm(**self.get_form_kwargs())
 
         return None
@@ -94,87 +91,5 @@ class ProfileListView(ListView):
     context_object_name = "profiles"
     template_name = "account/profile/list.html"
     paginate_by = 50
-
-
-# ***************************************************************************
-
-
-class CertificationCreateView(OwnerEditMixin, CreateView):
-    form_class = CertificationCreateForm
-    template_name = "account/profile/certification/create.html"
-
-    def get_success_url(self):
-        return reverse_lazy("profile_detail", args=[self.request.user.pk])
-
-
-class CertificationDetailView(OwnerMixin, DetailView):
-    model = Certification
-    context_object_name = "certification"
-    template_name = "account/profile/certification/detail.html"
-
-
-class CertificationListView(OwnerMixin, ListView):
-    model = Certification
-    context_object_name = "certifications"
-    template_name = "account/profile/certification/list.html"
-
-    def get_queryset(self):
-        return self.request.user.certification.all()
-
-
-# ***************************************************************************
-
-
-class EducationCreateView(OwnerEditMixin, CreateView):
-    form_class = EducationCreateForm
-    template_name = "account/profile/education/create.html"
-
-    def get_success_url(self):
-        return reverse_lazy("profile_detail", args=[self.request.user.pk])
-
-
-class EducationDetailView(OwnerMixin, DetailView):
-    model = Education
-    context_object_name = "education"
-    template_name = "account/profile/education/detail.html"
-
-
-class EducationListView(OwnerMixin, ListView):
-    model = Education
-    context_object_name = "qualifications"
-    template_name = "account/profile/education/list.html"
-
-    def get_queryset(self):
-        return self.request.user.education.all()
-
-    # def get(self, request):
-    #     return Education.objects.filter(user=request.user.pk)
-
-
-# ***************************************************************************
-
-
-class ExperienceCreateView(OwnerEditMixin, CreateView):
-    form_class = ExperienceCreateForm
-    template_name = "account/profile/experience/create.html"
-
-    def get_success_url(self):
-        return reverse_lazy("profile_detail", args=[self.request.user.pk])
-
-
-class ExperienceDetailView(OwnerMixin, DetailView):
-    model = Experience
-    context_object_name = "experience"
-    template_name = "account/profile/experience/detail.html"
-
-
-class ExperienceListView(OwnerMixin, ListView):
-    model = Experience
-    context_object_name = "experiences"
-    template_name = "account/profile/experience/list.html"
-
-    def get_queryset(self):
-        return self.request.user.experience.all()
-
 
 # ***************************************************************************

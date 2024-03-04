@@ -1,23 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Interviews{% endblock title %}
+{% block header %}Interviews{% endblock header %}
+{% block header-button %}
+    {% if applications %}
+        <a href="{% url 'schedule' %}" class="px-4 py-2 text-sm text-white rounded-md bg-primary hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark">
+            Schedule Interview
+        </a>
+    {% endif %}
+{% endblock header-button %}
 {% block head %}
-    <script src='{% static "js/index.global.min.js" %}'></script>
-    <script>
-    
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-          var today = new Date();  // Get the current date in JavaScript
-          var formattedToday = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-          var calendar = new FullCalendar.Calendar(calendarEl, {
+<script src='{% static "js/index.global.min.js" %}'></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var today = new Date();  // Get the current date in JavaScript
+        var formattedToday = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+        var calendar = new FullCalendar.Calendar(calendarEl, {
             initialDate: formattedToday,
             initialView: 'dayGridMonth',
             hiddenDays: [0, 6],
             headerToolbar: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
             },
             businessHours: {
                 // Define business hours (8 am to 5 pm)
@@ -37,54 +44,39 @@
             events: {
                 url: "{% url "interview_data" %}",
                 method: "GET",
-                failure: function(){
+                failure: function () {
                     alert("Failed to fetch calendar data");
                 }
             }
-          });
-      
-          calendar.render();
         });
-      
-      </script>
-      <style>
-        #calendar {
-          max-width: 1100px;
-          margin: 0 auto;
-        }
-        a {
-            text-decoration: none; /* Remove underlines */
-            color: inherit; /* Inherit the color from the parent */
-        }
-      
-      </style>
+
+        calendar.render();
+    });
+
+</script>
+<style>
+    #calendar {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    a {
+        text-decoration: none;
+        /* Remove underlines */
+        color: inherit;
+        /* Inherit the color from the parent */
+    }
+</style>
 {% endblock head %}
 {% block content %}
-<header class="bg-white shadow">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Interviews</h1>
-    </div>
-</header>
-
-<div class="p-5 justify-content-center">
-    {% if applications %}
-    <a href="{% url 'interview_create' %}">
-        <button type="button" class="w-full text-gray-900 bg-gray-200 border border-gray-300 focus:outline-none hover:bg-gray-800 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 hover:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-            Schedule Interview
-        </button>
-    </a>
-    {% endif %}
-</div>
-
-
 <section class="p-2 sm:p-5">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             <div class="overflow-x-auto">
-<div class="p-5 " id='calendar'></div>
+                <div class="p-5 " id='calendar'></div>
             </div>
-            </div>
-            </div>
-        </section>
+        </div>
+    </div>
+</section>
 
 {% endblock content %}

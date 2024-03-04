@@ -1,15 +1,20 @@
 from django.db import models
 from apps.company.models import Position
 from django.urls import reverse
-from utils.file import user_file_upload_path
+from utils.file import user_file_upload_path, application_file_upload_path
 from apps.accounts.models import Qualification
 from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 import datetime
 from djmoney.models.fields import MoneyField
-from django.conf import settings
+from django.contrib.auth import get_user_model
+from phonenumber_field.modelfields import PhoneNumberField
+import pycountry
+from django.db.models import UniqueConstraint
+from django_ckeditor_5.fields import CKEditor5Field
 
+User = get_user_model()
 
 
 class Region(models.Model):
@@ -35,13 +40,13 @@ class Vacancy(models.Model):
     deadline = models.DateTimeField()
     is_published = models.BooleanField(default=False)
     is_external = models.BooleanField(default=False)
-    remarks = models.TextField(blank=True, null=True)
+    remarks = CKEditor5Field(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created"]
-        verbose_name = "Vacancie"
+        verbose_name_plural = "Vacancies"
 
     def __str__(self):
         return self.position.title
@@ -51,39 +56,92 @@ class Vacancy(models.Model):
 
 
 class Application(models.Model):
+    COUNTRY_CHOICES = [
+        (country.alpha_2.lower(), country.name) for country in pycountry.countries
+    ]
+
+    class PopulationGroup(models.TextChoices):
+        RACIALLY_ADVANTAGED = "ra", "Racially Advantaged"
+        RACIALLY_DISADVANTAGED = "rd", "Racially Disadvantaged"
+
+    class Gender(models.TextChoices):
+        MALE = "male", "Male"
+        FEMALE = "female", "Female"
+
     class Status(models.TextChoices):
         SUBMITTED = "submitted", "Submitted"
         SHORTLISTED = "shortlisted", "Shortlisted"
         REJECTED = "rejected", "Rejected"
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="application")
-    vacancy = models.ForeignKey(
-        Vacancy, on_delete=models.CASCADE, related_name="applications"
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="applications"
     )
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    nationality = models.CharField(max_length=50, choices=COUNTRY_CHOICES, default="na")
+    population_group = models.CharField(max_length=50, choices=PopulationGroup.choices)
+    id_number = models.PositiveBigIntegerField(blank=True, null=True)
+    passport_number = models.CharField(max_length=9, blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=Gender.choices)
+    date_of_birth = models.DateField()
+    primary_contact = PhoneNumberField(region="NA")
+    secondary_contact = PhoneNumberField(blank=True, null=True)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.SUBMITTED
     )
-    cover_letter = models.TextField(null=True, blank=True)
-    remarks = models.TextField(null=True, blank=True)
-    document = models.FileField(
-        upload_to=user_file_upload_path, validators=[FileExtensionValidator(["pdf"])]
+    cover_letter = CKEditor5Field(blank=True, null=True)
+    cv = models.FileField(
+        upload_to=application_file_upload_path,
+        validators=[FileExtensionValidator(["pdf"])],
     )
+    document = models.FileField(
+        upload_to=application_file_upload_path,
+        validators=[FileExtensionValidator(["pdf"])],
+        blank=True,
+        null=True,
+    )
+    qualifications = models.ManyToManyField(Qualification)
+    remarks = CKEditor5Field(blank=True, null=True)
     submission_date = models.DateTimeField(auto_now_add=True)
 
-    # def save(self, *args, **kwargs):
-    #     # Check if the submission date is before the vacancy deadline
-    #     if self.submission_date > self.vacancy.deadline:
-    #         raise ValidationError(
-    #             "Application cannot be submitted after the vacancy deadline."
-    #         )
-
-    #     super().save(*args, **kwargs)
-
     class Meta:
-        unique_together = ("user", "vacancy")
+        constraints = [
+            UniqueConstraint(
+                fields=["vacancy", "user"],
+                name="unique_vacancy_user",
+            ),
+            UniqueConstraint(
+                fields=["vacancy", "id_number"],
+                name="unique_vacancy_id_number",
+            ),
+            UniqueConstraint(
+                fields=["vacancy", "passport_number"],
+                name="unique_vacancy_passport_number",
+            ),
+        ]
 
     def __str__(self):
-        return f"{self.user.profile.first_name} {self.user.profile.last_name} ({self.user.email})"
+        return self.email
+    
+    def save(self, *args, **kwargs):
+        if self.user and self.user.is_authenticated:
+            self.first_name = self.user.profile.first_name
+            self.last_name = self.user.profile.last_name
+            self.email = self.user.email
+            self.id_number = self.user.profile.id_number
+            self.gender = self.user.profile.gender
+            self.date_of_birth = self.user.profile.date_of_birth
+            self.primary_contact = self.user.profile.primary_contact
+            self.secondary_contact = self.user.profile.secondary_contact
+            self.cv = self.user.profile.cv
+
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("application_detail", args=[self.pk])
@@ -114,24 +172,24 @@ class Interview(models.Model):
     application = models.ForeignKey(
         Application,
         related_name="interviews",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
     dateTime = models.DateTimeField()
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.SET)
-    description = models.TextField(null=True, blank=True)
+    description = CKEditor5Field(blank=True, null=True)
     location = models.CharField(max_length=50, blank=True, choices=Location.choices)
     interview_type = models.CharField(
         max_length=20, choices=InterviewType.choices, default=InterviewType.IN_PERSON
     )
     duration = models.PositiveIntegerField(default=30)  # Duration in minutes
-    reschedule_reason = models.TextField(blank=True)
+    reschedule_reason = CKEditor5Field(blank=True)
     reschedule_date = models.DateTimeField(null=True, blank=True)
-    rejection_reasons = models.TextField(blank=True)
+    rejection_reasons = CKEditor5Field(blank=True)
 
     def __str__(self):
-        return self.application.user.email
+        return self.application
 
     def get_absolute_url(self):
         return reverse("interview_detail", args=[self.pk])
@@ -188,7 +246,7 @@ class Interview(models.Model):
 
 class Bursary(models.Model):
     title = models.CharField(max_length=200)
-    criteria = models.TextField()
+    criteria = CKEditor5Field()
     is_external = models.BooleanField(default=False)
     deadline = models.DateTimeField()
     is_published = models.BooleanField(default=False)
@@ -218,17 +276,17 @@ class BursaryApplication(models.Model):
         Bursary, related_name="bursary", on_delete=models.CASCADE
     )
     applicant = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name="applicant", on_delete=models.CASCADE
+        User, related_name="applicant", on_delete=models.CASCADE
     )
     status = models.CharField(
         max_length=20, choices=STATUS_TYPE.choices, default=STATUS_TYPE.SUBMITTED
     )
     # PARTICULARS RELATING TO THE COURSE OF STUDY
     field_of_study = models.CharField(max_length=150)
-    relevancy_to_current_occupation = models.TextField()
+    relevancy_to_current_occupation = CKEditor5Field()
     institute = models.CharField(max_length=100)
     mode_of_study = models.CharField(max_length=20, choices=MODE_OF_STUDY.choices)
-    mode_of_study_reason = models.TextField()
+    mode_of_study_reason = CKEditor5Field()
     minimum_study_duration = models.PositiveSmallIntegerField()
     maximum_study_duration = models.PositiveSmallIntegerField()
     commencement_date = models.DateField()

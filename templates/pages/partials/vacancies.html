@@ -1,0 +1,34 @@
+<section id="pricing" class="section-bg">
+    <div class="container">
+
+        <div class="section-header">
+            <h3 class="section-title">Vacancies</h3>
+            <span class="section-divider"></span>
+            <p class="section-description">Become Part of the team</p>
+        </div>
+
+        <div class="row">
+
+            {% for vacancy in vacancies_is_external %}
+            <div class="col-lg-4 col-md-6">
+                <div class="box featured" data-aos="fade-right">
+                    <h3>{{ vacancy.position.title }}</h3>
+                    <ul>
+                        <li><i class="ion-location"></i> {{ vacancy.town }}</li>
+                        <li><i class="ion-ios-paper-outline"></i>
+                            {% for qualification in vacancy.position.qualification.all %}
+                                {{ qualification.title }}
+                                {% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        </li>
+                        <li><i class="ion-ios-alarm-outline"></i> {{ vacancy.deadline }}</li>
+                    </ul>
+                    <a href="{{ vacancy.get_absolute_url }}" class="get-started-btn">Apply</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>

@@ -1,0 +1,56 @@
+{% load static %}
+{% load tailwind_filters %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ vacancy.position.title }} Vacancy</title>
+    <link rel="stylesheet" href="{% static 'css/flowbite.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/content-styles.css' %}" />
+</head>
+
+<body>
+    <section class="p-5 mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <section class="bg-white dark:bg-gray-900">
+                    <div id="section" class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{form|crispy }}
+                            <br />
+
+                            {% if not existing and profile_complete %}
+                            <button
+                                class="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                type="submit">
+                                Apply
+                            </button>
+                            {% else %}
+                            <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                                role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                    <span class="font-medium">You cannot apply for this vacancy! You've either already
+                                        applied or your Profile is missing inputs.</span> Find other vacancies <a
+                                        href="{% url 'home' %}"><u>Here</u></a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

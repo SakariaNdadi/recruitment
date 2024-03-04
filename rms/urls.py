@@ -36,16 +36,20 @@ urlpatterns = [
         name="schema-swagger-ui",
     ),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("__debug__/", include("debug_toolbar.urls")),
     # Documentation and Schema
     path("", include("apps.pages.urls")),
     path("dashboard/", include("apps.dashboard.urls")),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("apps.accounts.urls")),
     path("recruitment/", include("apps.recruitment.urls")),
+    path("skills/", include("apps.skills_audit.urls")),
+    path("e-learning/", include("apps.elearning.urls")),
+    path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
 ]
 if settings.DEBUG:
     urlpatterns += [
         path("admin/", admin.site.urls),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 elif settings.DEBUG == False:
-    urlpatterns += [path("superuseradministration/", admin.site.urls)]
+    urlpatterns += [path("telecomsuperuseradministration/", admin.site.urls)]

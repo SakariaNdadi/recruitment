@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 User = get_user_model()
 
 
 class Department(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True, null=True)
+    # description = models.TextField(blank=True, null=True)
+    description = CKEditor5Field(blank=True, null=True)
     chief = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -21,7 +24,8 @@ class Department(models.Model):
 
 class Division(models.Model):
     title = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True, null=True)
+    # description = models.TextField(blank=True, null=True)
+    description = CKEditor5Field(blank=True, null=True)
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, related_name="divisions"
     )
@@ -64,7 +68,16 @@ class Qualification(models.Model):
     title = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.type}: {self.title}"
+        capitalized_type = self.type.capitalize()
+        return f"{capitalized_type} in {self.title}"
+
+class Certification(models.Model):
+    title = models.CharField(max_length=50)
+    level = models.CharField(max_length=50)
+    institution_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
 
 
 class Position(models.Model):
@@ -94,11 +107,11 @@ class Position(models.Model):
         DU = "du", "DU"
 
     title = models.CharField(max_length=50)
-    key_purpose = models.TextField(null=True, blank=True)
-    key_result_areas = models.TextField(null=True, blank=True)
-    key_knowledge = models.TextField(null=True, blank=True)
-    personality_requirements = models.TextField(null=True, blank=True)
-    experience = models.TextField(null=True, blank=True)
+    key_purpose = CKEditor5Field(blank=True, null=True)
+    key_result_areas = CKEditor5Field(blank=True, null=True)
+    key_knowledge = CKEditor5Field(blank=True, null=True)
+    personality_requirements = CKEditor5Field(blank=True, null=True)
+    experience = CKEditor5Field(blank=True, null=True)
     job_grade = models.CharField(max_length=2, choices=JobGrade.choices)
     division = models.ForeignKey(
         Division, on_delete=models.CASCADE, related_name="position"

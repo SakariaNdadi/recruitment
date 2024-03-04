@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+{% block title %}{{ jcp.employee.first_name }} {{ jcp.employee.last_name }} - {{ jcp.position }}{% endblock title %}
+{% block content %}
+<header class="bg-white shadow">
+	<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+		<h1 class="text-3xl font-bold tracking-tight text-gray-900">
+			Employee Comptency Report for {{ jcp.employee.first_name }} {{ jcp.employee.last_name }} - {{ jcp.position|upper }}
+		</h1>
+	</div>
+</header>
+
+<section class="p-3 sm:p-5">
+	<div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+		<!-- Start coding here -->
+		<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+			<div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                <div class="w-full md:w-1/2">
+                    Describe how the process will be small small
+                </div>
+            </div>
+			<div class="overflow-x-auto">
+				<div id="question-list">{% include "skills_audit/ecp/partials/question_list.html" %}</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}

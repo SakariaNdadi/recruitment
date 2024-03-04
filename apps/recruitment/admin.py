@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Region, Town, Vacancy, Application, Interview, Bursary, BursaryApplication
+from .models import (
+    Region,
+    Town,
+    Vacancy,
+    Application,
+    Interview,
+    Bursary,
+    BursaryApplication,
+)
 
 
 @admin.register(Vacancy)
@@ -10,7 +18,6 @@ class VacancyAdmin(admin.ModelAdmin):
         "deadline",
         "is_published",
         "is_external",
-        "remarks",
     ]
     list_filter = [
         "town__region",
@@ -25,9 +32,12 @@ class VacancyAdmin(admin.ModelAdmin):
     search_fields = ["position"]
     raw_id_fields = ["position"]
 
+
 class TownInline(admin.TabularInline):
     model = Town
-    raw_id_fields = ["region",]
+    raw_id_fields = [
+        "region",
+    ]
 
 
 @admin.register(Region)
@@ -40,14 +50,16 @@ class RegionAdmin(admin.ModelAdmin):
         TownInline,
     ]
 
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = [
-        "user",
+        "email",
         "vacancy",
         "status",
         "submission_date",
     ]
+
 
 @admin.register(Interview)
 class InterviewAdmin(admin.ModelAdmin):
@@ -58,11 +70,14 @@ class InterviewAdmin(admin.ModelAdmin):
         "interview_type",
         "duration",
     ]
+
     def application_email(self, obj):
         # Define a custom method to display the application's email
-        return obj.application.user.email
+        return obj.application.email
 
-    application_email.short_description = "Applicant Email"  # Set a user-friendly column header
+    application_email.short_description = (
+        "Applicant Email"  # Set a user-friendly column header
+    )
     list_filter = [
         "dateTime",
         "status",
@@ -70,13 +85,14 @@ class InterviewAdmin(admin.ModelAdmin):
     ]
     list_editable = [
         "dateTime",
-        "status",
         "interview_type",
         "duration",
     ]
     raw_id_fields = ["application"]
 
+
 admin.site.register(Bursary)
+
 
 @admin.register(BursaryApplication)
 class BursaryApplicationAdmin(admin.ModelAdmin):

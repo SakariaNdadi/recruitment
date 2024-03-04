@@ -9,6 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 import pycountry
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
+from django_ckeditor_5.fields import CKEditor5Field
 
 User = get_user_model()
 
@@ -24,7 +25,6 @@ class Profile(models.Model):
 
     class UserType(models.TextChoices):
         ADMIN = "admin", "Admin"
-        APPLICANT = "applicant", "Applicant"
         CHIEF = "chief", "Chief"
         MANAGER = "manager", "Manager"
         SUPERVISOR = "supervisor", "Supervisor"
@@ -42,31 +42,31 @@ class Profile(models.Model):
         related_name="profile",
         on_delete=models.CASCADE,
     )
-    first_name = models.CharField(max_length=20, blank=True, null=True)
-    last_name = models.CharField(max_length=20, blank=True, null=True)
+    first_name = models.CharField(max_length=20, null=True)
+    last_name = models.CharField(max_length=20, null=True)
     user_type = models.CharField(
-        max_length=10, choices=UserType.choices, default=UserType.APPLICANT
+        max_length=10, choices=UserType.choices, default=UserType.STAFF
     )
     nationality = models.CharField(max_length=50, choices=COUNTRY_CHOICES, default="na")
     population_group = models.CharField(
         max_length=50, choices=PopulationGroup.choices, null=True, blank=True
     )
-    id_number = models.PositiveBigIntegerField(blank=True, null=True, unique=True)
+    id_number = models.PositiveBigIntegerField(null=True, unique=True)
     gender = models.CharField(
-        max_length=10, choices=Gender.choices, blank=True, null=True
+        max_length=10, choices=Gender.choices, null=True
     )
-    date_of_birth = models.DateField(blank=True, null=True)
-    primary_contact = PhoneNumberField(region="NA", blank=True, null=True)
-    secondary_contact = PhoneNumberField(region="NA", blank=True, null=True)
+    date_of_birth = models.DateField(null=True)
+    primary_contact = PhoneNumberField(region="NA", null=True)
+    secondary_contact = PhoneNumberField(blank=True, null=True)
 
     # employee details
     position = models.ForeignKey(
-        Position, on_delete=models.SET_NULL, null=True, blank=True
+        Position, on_delete=models.SET_NULL, null=True
     )
-    employee_id = models.PositiveBigIntegerField(blank=True, null=True)
-    call_center_number = models.PositiveIntegerField(blank=True, null=True)
-    appointed_date = models.DateField(null=True, blank=True)
-    postal_address = models.TextField(null=True, blank=True)
+    employee_id = models.PositiveBigIntegerField(null=True)
+    office_contact = PhoneNumberField(region="NA", blank=True, null=True)
+    call_center_number = models.PositiveIntegerField(null=True)
+    appointed_date = models.DateField(null=True)
 
     # social platforms
     linkedin = models.URLField(blank=True, null=True)
@@ -135,61 +135,3 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse("profile_detail", args=[str(self.user.id)])
-
-
-class Experience(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="experience"
-    )
-    job_title = models.CharField(max_length=50)
-    job_description = models.TextField()
-    company_name = models.CharField(max_length=50)
-    employment_type = models.CharField(max_length=20)
-    location = models.CharField(max_length=20)
-    employment_status = models.BooleanField(default=False)
-    industry = models.CharField(max_length=20)
-    start_date = models.DateField()
-    end_date = models.DateField()
-
-    def __str__(self):
-        return self.job_title
-
-    def get_absolute_url(self):
-        return reverse("experience_detail", args=[self.id])
-
-
-class Education(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="education"
-    )
-    institution_name = models.CharField(max_length=20)
-    qualification = models.ForeignKey(Qualification, on_delete=models.CASCADE)
-    obtained_date = models.DateField()
-    file = models.FileField(
-        upload_to=user_file_upload_path, validators=[FileExtensionValidator(["pdf"])]
-    )
-
-    def __str__(self):
-        return self.qualification.title
-
-    def get_absolute_url(self):
-        return reverse("qualification_detail", args=[self.id])
-
-
-class Certification(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="certification"
-    )
-    title = models.CharField(max_length=50)
-    institution_name = models.CharField(max_length=50)
-    obtained_date = models.DateField()
-    validity = models.PositiveSmallIntegerField()
-    file = models.FileField(
-        upload_to=user_file_upload_path, validators=[FileExtensionValidator(["pdf"])]
-    )
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse("certification_detail", args=[self.id])
