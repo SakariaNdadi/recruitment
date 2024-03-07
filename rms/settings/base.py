@@ -12,7 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne", # channels
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -46,8 +45,7 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
     # Debug
     "debug_toolbar",
-    # Channels
-    "channels",
+    # Other
     "django_extensions",
     # ***************************************
     #  LOCAL APPS
@@ -58,9 +56,6 @@ INSTALLED_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.company.apps.CompanyConfig",
     "apps.recruitment.apps.RecruitmentConfig",
-    "apps.skills_audit.apps.SkillsAuditConfig",
-    "apps.elearning.apps.ElearningConfig",
-    "apps.notifications.apps.NotificationsConfig",
 ]
 
 MIDDLEWARE = [

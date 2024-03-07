@@ -43,8 +43,6 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("apps.accounts.urls")),
     path("recruitment/", include("apps.recruitment.urls")),
-    path("skills/", include("apps.skills_audit.urls")),
-    path("e-learning/", include("apps.elearning.urls")),
     path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
 ]
 if settings.DEBUG:
