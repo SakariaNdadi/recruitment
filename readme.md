@@ -1,4 +1,4 @@
-# System Requirements
+# System Overview
 The recruitment system is a comprehensive platform designed to streamline the hiring process for organizations. It leverages modern technologies such as Docker, Redis, and PostgreSQL to provide a scalable, efficient, and secure solution. 
 
 At its core, the system facilitates the entire recruitment lifecycle, from job posting and candidate sourcing to interview scheduling, evaluation, and onboarding. Users, including recruiters, hiring managers, and candidates, interact with the system through a user-friendly interface, which offers intuitive navigation and robust functionality.
